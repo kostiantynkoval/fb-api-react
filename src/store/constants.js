@@ -1,4 +1,4 @@
-export const BASE_URL = 'http://127.0.1.1:8080/api'; //'http://75e17217.ngrok.io/api'; //
+export const BASE_URL = 'http://localhost:port/api';
 
 /* Auth */
 export const LOGIN_REQUEST = 'LOGIN_REQUEST';

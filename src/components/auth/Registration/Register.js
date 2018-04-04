@@ -31,6 +31,7 @@ class Register extends React.Component {
     }
 
     onSubmit(event) {
+        //error handling
         const emailReg = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         const passwReg = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/;
         event.preventDefault();
@@ -57,7 +58,7 @@ class Register extends React.Component {
         }
 
 
-
+        // If no errors make register action
         this.props.registerAction({
             password: this.state.passwordValue,
             email: this.state.emailValue
@@ -129,9 +130,7 @@ const mapDispatchToProps = dispatch => ({
 });
 
 const mapStateToProps = state => ({
-    isRequesting: state.auth.isRequesting,
-    isLoggedIn: state.auth.isLoggedIn,
-    // token: state.auth.token,
+    isRequesting: state.auth.isRequesting
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Register));

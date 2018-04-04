@@ -11,6 +11,7 @@ import {showItemWindowAction,showListWindowAction} from '../../../store/actions/
 
 const grid = 8;
 
+// Styles for desk components
 const styles = {
     root: {
         boxSizing: 'border-box',
@@ -103,11 +104,15 @@ const getColumnStyle = (isDragging, draggableStyle) => ({
 
 const getListStyle = isDraggingOver => ({
     background: isDraggingOver ? 'lightblue' : 'blue',
+
+    // some basic styles to make the items look a bit nicer
     ...styles.root,
 });
 
 const getListItemsStyle = isDraggingOver => ({
     background: isDraggingOver ? 'lightblue' : 'lightgrey',
+
+    // some basic styles to make the items look a bit nicer
     ...styles.listItems,
 });
 
@@ -131,6 +136,15 @@ class DeskArea extends Component {
     showListNameWindow(list) {
         this.props.showListWindowAction(list);
     }
+
+    removeList(e, id) {
+        e.stopPropagation();
+        const newItems = this.props.items;
+        const listIndex = newItems.findIndex(list => list.id === id);
+        newItems.splice(listIndex, 1);
+        this.props.removeListAction(newItems);
+    }
+
 
     // All logic with items and lists handling contained here in order to not affect desk animations
 
@@ -182,13 +196,6 @@ class DeskArea extends Component {
 
     }
 
-    removeList(id) {
-        const newItems = this.props.items;
-        const listIndex = newItems.findIndex(list => list.id === id);
-        newItems.splice(listIndex, 1);
-        this.props.removeListAction(newItems);
-    }
-
     render() {
         return (
             <DragDropContext onDragEnd={this.onDragEnd}>
@@ -213,7 +220,7 @@ class DeskArea extends Component {
                                                 )}
                                             >
                                                 <span onClick={() => this.showListNameWindow(list)} style={styles.listTitle}>{list.name}
-                                                <IconButton style={styles.removeButton} onClick={() => this.removeList(list.id)}>
+                                                <IconButton style={styles.removeButton} onClick={(e) => this.removeList(e, list.id)}>
                                                     <RemoveCircle color={red900}/>
                                                 </IconButton>
                                                     </span>

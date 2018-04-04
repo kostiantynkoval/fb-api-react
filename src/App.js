@@ -10,8 +10,6 @@ import Login from './components/auth/Login/Login';
 import Register from './components/auth/Registration/Register';
 
 import Snackbar from 'material-ui/Snackbar';
-
-import './App.css';
 import {hideSnackbarAction} from "./store/actions/snackbar";
 
 class App extends Component {
@@ -28,9 +26,12 @@ class App extends Component {
                     <Route exact={true} path="/" render={() => (
                         this.props.isLoggedIn ? (<Desk/>) : (<Redirect to="/login" />)
                     )} />
-                    <Route exact path="/login" component={Login} />
-                    <Route exact path="/register" component={Register} />
-                    {/*<Route exact path="/" render={() => (<Redirect to="/dashboard"/>)}/>*/}
+                    <Route exact path="/login" render={() => (
+                        !this.props.isLoggedIn ? (<Login/>) : (<Redirect to="/" />)
+                    )} />
+                    <Route exact path="/register" render={() => (
+                        !this.props.isLoggedIn ? (<Register/>) : (<Redirect to="/" />)
+                    )} />
                 </main>
 
                 <Snackbar

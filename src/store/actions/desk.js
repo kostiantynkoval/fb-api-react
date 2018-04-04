@@ -1,5 +1,7 @@
 import {apiRequest, apiSuccess} from '../actions/api'
 
+// unused constants are prepared for backend
+
 import {
     BASE_URL,
     GET_ITEMS_FAIL,
@@ -25,6 +27,7 @@ import {
 export const getItemsAction = () => dispatch => {
     dispatch(apiRequest(GET_ITEMS_REQUEST));
 
+    // getting mock items
     setTimeout(() => getItems(), 500);
     function getItems() {
 
@@ -56,6 +59,7 @@ export const getItemsAction = () => dispatch => {
 
 }
 
+// add new item
 export const addTodoAction = (items) => dispatch => {
     dispatch(apiRequest(ADD_TODO_REQUEST));
 
@@ -66,6 +70,7 @@ export const addTodoAction = (items) => dispatch => {
 
 }
 
+//add new list
 export const addListAction = (items) => dispatch => {
     dispatch(apiRequest(ADD_LIST_REQUEST));
 
@@ -76,6 +81,7 @@ export const addListAction = (items) => dispatch => {
 
 }
 
+// reordering items
 export const reorderTodoAction = todoData => dispatch => {
     setTimeout(() => reorderTodo(), 500);
     function reorderTodo() {
@@ -84,7 +90,7 @@ export const reorderTodoAction = todoData => dispatch => {
 
 }
 
-
+// reordering lists
 export const reorderListAction = listData => dispatch => {
     setTimeout(() => reorderList(), 500);
     function reorderList() {
@@ -93,6 +99,7 @@ export const reorderListAction = listData => dispatch => {
 
 }
 
+// delete list
 export const removeListAction = items => dispatch => {
     dispatch(apiRequest(REMOVE_LIST_REQUEST));
 
@@ -102,6 +109,7 @@ export const removeListAction = items => dispatch => {
     }
 
 }
+
 
 export const renameListAction = items => dispatch => {
     dispatch(apiRequest(RENAME_LIST_REQUEST));

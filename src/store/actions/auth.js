@@ -1,6 +1,7 @@
-// import request from 'superagent';
 import {push} from 'react-router-redux';
 import {apiRequest, apiSuccess, apiFail} from '../actions/api'
+
+// BASE_URL constant prepared for backend
 
 import {
     BASE_URL,

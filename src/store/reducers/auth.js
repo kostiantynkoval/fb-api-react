@@ -18,6 +18,7 @@ const initialState = {
 export default function (state = initialState, action) {
     switch (action.type) {
         case LOGIN_REQUEST:
+        case LOGOUT_REQUEST:
             return {
                 ...state,
                 isRequesting: true,
@@ -35,11 +36,6 @@ export default function (state = initialState, action) {
                 isRequesting: false,
                 isLoggedIn: false,
                 token: ''
-            };
-        case LOGOUT_REQUEST:
-            return {
-                ...state,
-                isRequesting: true,
             };
         case LOGOUT_SUCCESS:
             return {

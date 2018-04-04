@@ -39,6 +39,8 @@ class NewItemsInput extends React.Component {
 
         // Return error if empty
         if(e.currentTarget[0].value === '') {this.setState({errorText: 'This field is required'}); return false}
+
+        // finding out what to add: LIST or ITEM
         if(this.props.listIndex!=='COLUMN') {
             const itemsArr = this.props.items;
             const newItem = {id: Date.now().toString(), name: e.currentTarget[0].value, content: ''}

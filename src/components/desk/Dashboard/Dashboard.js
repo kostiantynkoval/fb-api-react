@@ -24,26 +24,36 @@ class Dashboard extends React.Component {
     render() {
         return (
             <div>
+                {/* Fader for requests */}
                 {this.props.isAuthRequesting || this.props.isDeskRequesting ? <div className="fader"></div> : null}
+
+                {/* Top toolbar */}
                 <Toolbar style={{
                     backgroundColor: '#b7b7b7',
                     display: 'flex',
                     flexFlow: 'row nowrap',
                     justifyContent: 'space-between',
                     alignItems: 'center'
-                }} >
+                }}>
                     <ToolbarGroup>
                         <ToolbarTitle text="Simple React Desk"/>
                     </ToolbarGroup>
                     <ToolbarGroup>
-                        <RaisedButton label="Logout" secondary={true} style={{width: '120px'}} onClick={this.handleLogout} />
+                        <RaisedButton
+                            label="Logout"
+                            secondary={true}
+                            style={{width: '120px'}}
+                            onClick={this.handleLogout}/>
                     </ToolbarGroup>
                 </Toolbar>
 
-                <DeskArea />
-                
+                {/* Board  */}
+                <DeskArea/>
+
+                {/* Modal window for items changes handling */}
                 <ItemModal/>
 
+                {/* Modal window for change list name */}
                 <ListNameModal/>
 
             </div>
@@ -59,9 +69,7 @@ const mapDispatchToProps = dispatch => ({
 
 const mapStateToProps = state => ({
     isAuthRequesting: state.auth.isRequesting,
-    isDeskRequesting: state.desk.isRequesting,
-    isLoggedIn: state.auth.isLoggedIn,
-    // token: state.auth.token,
+    isDeskRequesting: state.desk.isRequesting
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Dashboard));

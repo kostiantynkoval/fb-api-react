@@ -29,6 +29,7 @@ class Login extends React.Component {
     }
 
     onSubmit(event) {
+        // Errors handling
         const emailReg = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         const passwReg = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/;
         event.preventDefault();
@@ -50,6 +51,7 @@ class Login extends React.Component {
             return;
         }
 
+        // If no errors dispatch login action
         this.props.loginAction({
             password: this.state.passwordValue,
             email: this.state.emailValue
@@ -111,8 +113,7 @@ const mapDispatchToProps = dispatch => ({
 
 const mapStateToProps = state => ({
     isRequesting: state.auth.isRequesting,
-    isLoggedIn: state.auth.isLoggedIn,
-    // token: state.auth.token,
+    isLoggedIn: state.auth.isLoggedIn
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Login));

@@ -39,19 +39,28 @@ class ListNameModal extends React.Component {
         }
     }
 
+    //submitting modal window
     renameList() {
+        // handling form errors
         if(this.state.errorText === '' && this.state.name === '') {
             this.setState({errorText: '* List title is required'});
             return false;
         }
         const newItems = this.props.items;
+
+        // finding out list index which we want to update
         const listIndex = newItems.findIndex(item => item.id === this.props.list.id);
+
+        // new item which replace old one
         newItems[listIndex].name = this.state.name;
         this.props.renameListAction(newItems);
+
+        // reset form errors
         this.setState({errorText: ''});
     }
 
     render() {
+        //Submit, Cancel buttons
         const actions = [
             <RaisedButton
                 style={styles.button}

@@ -7,6 +7,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import {addListAction} from '../../../store/actions/desk';
 import {changeItemAction, hideItemWindowAction, deleteItemAction} from '../../../store/actions/itemChange';
 
+// Gap between buttons
 const styles = {
     button: {
         margin: 4
@@ -52,21 +53,26 @@ class ItemsModal extends React.Component {
     }
 
     submitForm(e) {
+        // handling form errors
         if(this.state.errorText === '' && this.state.name === '') {
             this.setState({errorText: '* TODO Name is required'});
             return false;
         }
+        // new item which replace old one
         const changedItem = {
             id: this.props.item.id,
             name: this.state.name,
             content: this.state.content
         };
         this.props.changeItemAction(changedItem, this.props.items);
+
+        // reset form errors
         this.setState({errorText: ''});
         e.preventDefault()
     }
 
     render() {
+        //Submit, Delete, Cancel buttons
         const actions = [
             <RaisedButton
                 style={styles.button}
