@@ -1,4 +1,3 @@
-export const BASE_URL = 'http://localhost:port/api';
 
 /* Auth */
 export const LOGIN_REQUEST = 'LOGIN_REQUEST';
@@ -16,9 +15,9 @@ export const SNACKBAR_SHOW = 'SNACKBAR_SHOW';
 export const SNACKBAR_HIDE = 'SNACKBAR_HIDE';
 
 /* Desk Actions */
-export const GET_ITEMS_REQUEST = 'GET_ITEMS_REQUEST';
-export const GET_ITEMS_SUCCESS = 'GET_ITEMS_SUCCESS';
-export const GET_ITEMS_FAIL = 'GET_ITEMS_FAIL';
+export const UPLOAD_FILES_REQUEST = 'UPLOAD_FILES_REQUEST';
+export const UPLOAD_FILES_SUCCESS = 'UPLOAD_FILES_SUCCESS';
+export const UPLOAD_FILES_FAIL = 'UPLOAD_FILES_FAIL';
 export const ADD_TODO_REQUEST = 'ADD_TODO_REQUEST';
 export const ADD_TODO_SUCCESS = 'ADD_TODO_SUCCESS';
 export const ADD_TODO_FAIL = 'ADD_TODO_FAIL';

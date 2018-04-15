@@ -39,7 +39,6 @@ const initialState = {
 
 export default function (state = initialState, action) {
     switch (action.type) {
-        case GET_ITEMS_REQUEST:
         case CHANGE_ITEM_REQUEST:
         case RENAME_LIST_REQUEST:
         case DELETE_ITEM_REQUEST:
@@ -53,7 +52,6 @@ export default function (state = initialState, action) {
                 ...state,
                 isRequesting: true,
             };
-        case GET_ITEMS_SUCCESS:
         case CHANGE_ITEM_SUCCESS:
         case RENAME_LIST_SUCCESS:
         case DELETE_ITEM_SUCCESS:
@@ -68,7 +66,6 @@ export default function (state = initialState, action) {
                 isRequesting: false,
                 items: [...action.payload],
             };
-        case GET_ITEMS_FAIL:
         case CHANGE_ITEM_FAIL:
         case RENAME_LIST_FAIL:
         case DELETE_ITEM_FAIL:

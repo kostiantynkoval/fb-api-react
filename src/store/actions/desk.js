@@ -1,12 +1,10 @@
 import {apiRequest, apiSuccess} from '../actions/api'
 
-// unused constants are prepared for backend
-
 import {
     BASE_URL,
-    GET_ITEMS_FAIL,
-    GET_ITEMS_REQUEST,
-    GET_ITEMS_SUCCESS,
+    UPLOAD_FILES_REQUEST,
+    UPLOAD_FILES_SUCCESS,
+    UPLOAD_FILES_FAIL,
     ADD_TODO_REQUEST,
     ADD_TODO_SUCCESS,
     ADD_TODO_FAIL,
@@ -24,50 +22,25 @@ import {
     LIST_MODAL_HIDE,
 } from '../constants';
 
-export const getItemsAction = () => dispatch => {
-    dispatch(apiRequest(GET_ITEMS_REQUEST));
 
-    // getting mock items
-    setTimeout(() => getItems(), 500);
-    function getItems() {
+// upload new item
+export const uploadFilesAction = (items) => dispatch => {
+    dispatch(apiRequest(UPLOAD_FILES_REQUEST));
 
-        const items = [
-            {
-                name: 'List1',
-                id: 'list1',
-                items: [
-                    {id: 'item-0', name: 'Name', content: 'item 0'}, {id: 'item-1', name: 'Name', content: 'item 1'}, {id: 'item-2', name: 'Name', content: 'item 2'}, {id: 'item-3', name: 'Name', content: 'item 3'},{id: 'item-4', name: 'Name', content: 'item 4'}, {id: 'item-5', name: 'Name', content: 'item 5'}, {id: 'item-6', name: 'Name', content: 'item 6'}, {id: 'item-7', name: 'Name', content: 'item 7'},{id: 'item-8', name: 'Name', content: 'item 8'}, {id: 'item-9', name: 'Name', content: 'item 9'}, {id: 'item-10', name: 'Name', content: 'item 10'}, {id: 'item-11', name: 'Name', content: 'item 11'}
-                ]
-            },
-            {
-                name: 'List2',
-                id: 'list2',
-                items: [
-                    {id: 'item-15', name: 'Name', content: 'item 15'}, {id: 'item-16', name: 'Name', content: 'item 16'}, {id: 'item-12', name: 'Name', content: 'item 12'}, {id: 'item-13', name: 'Name', content: 'item 13'},{id: 'item-14', name: 'Name', content: 'item 14'}
-                ]
-            },
-            {
-                name: 'List3',
-                id: 'list3',
-                items: [
-                    {id: 'item-20', name: 'Name', content: 'item 20'}, {id: 'item-21', name: 'Name', content: 'item 21'}, {id: 'item-22', name: 'Name', content: 'item 22'}, {id: 'item-23', name: 'Name', content: 'item 23'},{id: 'item-24', name: 'Name', content: 'item 24'}, {id: 'item-25', name: 'Name', content: 'item 25'}, {id: 'item-26', name: 'Name', content: 'item 26'}
-                ]
+    console.log('items to upload', items);
+
+    window.FB.api(
+        '/580838048702436/photos/',
+        'POST',
+        {'source': items},
+        function(response) {
+            if (response && !response.error) {
+                console.log('upload result:', response);
+            } else {
+                console.log('upload result error:', response);
             }
-        ];
-        dispatch(apiSuccess(GET_ITEMS_SUCCESS, items))
-    }
-
-}
-
-// add new item
-export const addTodoAction = (items) => dispatch => {
-    dispatch(apiRequest(ADD_TODO_REQUEST));
-
-    setTimeout(() => addTodo(), 500);
-    function addTodo() {
-        dispatch(apiSuccess(ADD_TODO_SUCCESS, items))
-    }
-
+        }
+    );
 }
 
 //add new list

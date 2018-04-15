@@ -1,0 +1,29 @@
+.frameWrapper {
+    border: 1px dotted darkred;
+}
+.imageWrapper {
+    width: 200px;
+    height: 200px;
+    position: relative;
+}
+.imageWrapper img {
+    width: 100%;
+    height: auto;
+    overflow: hidden;
+}
+.bg-gray {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgb(55,55,55);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+.bg-gray.active {
+    opacity: .5;
+}
+.progress-line {
+    margin-top: 4px;
+}
