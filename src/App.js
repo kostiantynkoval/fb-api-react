@@ -7,7 +7,6 @@ import { Route } from 'react-router-dom';
 import { Redirect } from 'react-router';
 import Desk from './components/desk/Dashboard/Dashboard';
 import Login from './components/auth/Login/Login';
-import Register from './components/auth/Registration/Register';
 
 import Snackbar from 'material-ui/Snackbar';
 import {hideSnackbarAction} from "./store/actions/snackbar";
@@ -24,13 +23,12 @@ class App extends Component {
                 {this.props.isRequesting ? <div className="fader"></div> : null}
                 <main>
                     <Route exact={true} path="/" render={() => (
-                        this.props.isLoggedIn ? (<Desk/>) : (<Redirect to="/login" />)
+                        <Desk/>
+                        // this.props.isLoggedIn ? (<Desk/>) : (<Redirect to="/login" />)
                     )} />
                     <Route exact path="/login" render={() => (
-                        !this.props.isLoggedIn ? (<Login/>) : (<Redirect to="/" />)
-                    )} />
-                    <Route exact path="/register" render={() => (
-                        !this.props.isLoggedIn ? (<Register/>) : (<Redirect to="/" />)
+                        <Login/>
+                        // !this.props.isLoggedIn ? (<Login/>) : (<Redirect to="/" />)
                     )} />
                 </main>
 

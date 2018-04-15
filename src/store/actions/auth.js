@@ -1,5 +1,5 @@
 import {push} from 'react-router-redux';
-import {apiRequest, apiSuccess, apiFail} from '../actions/api'
+import {apiRequest, apiSuccess, apiFail} from '../actions/api';
 
 // BASE_URL constant prepared for backend
 
@@ -39,31 +39,6 @@ export const loginAction = loginData => dispatch => {
 
     }
 
-}
-
-export const registerAction = regData => dispatch => {
-    dispatch(apiRequest(REGISTER_REQUEST));
-
-    setTimeout(() => doRegistration(), 800);
-
-    function doRegistration() {
-        localStorage.removeItem('token');
-        if (regData.email !== '' && regData.password !== '') {
-
-            if(localStorage.getItem(regData.email)) {
-                dispatch(apiFail(REGISTER_FAIL, ''));
-                dispatch(apiSuccess(SNACKBAR_SHOW, `Register Failed. User with email ${regData.email} already registered`));
-            } else {
-                localStorage.setItem(regData.email, regData.password);
-                dispatch(apiSuccess(REGISTER_SUCCESS, ''));
-                dispatch(apiSuccess(SNACKBAR_SHOW, 'Register Successful. Now you can log in.'));
-                dispatch(push('/login'));
-            }
-        } else {
-            dispatch(apiFail(REGISTER_FAIL, ''));
-            dispatch(apiSuccess(SNACKBAR_SHOW, 'Register Failed'));
-        }
-    }
 }
 
 export const logoutAction = () => dispatch => {

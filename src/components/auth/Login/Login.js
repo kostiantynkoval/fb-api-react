@@ -1,105 +1,114 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {withRouter, Link} from 'react-router-dom';
+import {withRouter} from 'react-router-dom';
 import {loginAction} from '../../../store/actions/auth';
-import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
-import './Login.css'
+import Facebook from './facebook';
 
 
 class Login extends React.Component {
 
     constructor(props) {
         super(props);
-        this.onSubmit = this.onSubmit.bind(this);
-        this.onInput = this.onInput.bind(this);
-        this.state = {
-            emailValue: '',
-            emailValueErrorText: '',
-            passwordValue: '',
-            passwordValueErrorText: '',
-        }
+        this.login = this.login.bind(this);
+        this.logout = this.logout.bind(this);
+        this.status = this.status.bind(this);
+        this.getAlbums = this.getAlbums.bind(this);
     }
 
+    componentDidMount() {
+        const facebookAPI = new Facebook();
 
-    onInput(event, newValue) {
-        const errorVar = `${event.currentTarget.name}ErrorText`;
-        this.setState({[event.currentTarget.name]: newValue});
-        this.setState({[errorVar]: ''});
+
+        facebookAPI.getLoginStatus(function(response){
+            if(response.status === "connected"){
+                console.log('response.status', response);
+            }
+        }.bind(this));
+
+        console.log('facebookAPI', facebookAPI);
+        console.log('state', this.state);
     }
 
-    onSubmit(event) {
-        // Errors handling
-        const emailReg = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        const passwReg = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/;
-        event.preventDefault();
-        if (this.state.emailValue === '') {
-
-            this.setState({emailValueErrorText: '* Email is required'})
-            return;
-        }
-        if (!emailReg.test(this.state.emailValue)) {
-            this.setState({emailValueErrorText: '* This email is not valid'})
-            return;
-        }
-        if (this.state.passwordValue === '') {
-            this.setState({passwordValueErrorText: '* Password is required'})
-            return;
-        }
-        if (!passwReg.test(this.state.passwordValue)) {
-            this.setState({passwordValueErrorText: '* Password should contain min 6 chars, at least 1 letter and 1 number'})
-            return;
-        }
-
-        // If no errors dispatch login action
-        this.props.loginAction({
-            password: this.state.passwordValue,
-            email: this.state.emailValue
+    logout() {
+        window.FB.logout(function(response) {
+            if (response && !response.error) {
+                console.log('logout:', response);
+            } else {
+                console.log('logout error:', response);
+            }
         });
-        document.getElementsByTagName('form')[0].reset();
+    }
+
+    login() {
+        window.FB.login();
+    }
+
+    status() {
+        window.FB.getLoginStatus(function(response){
+            console.log('response.status', response);
+        });
+    }
+
+
+    getAlbums() {
+    window.FB.api(
+            '/me/albums',
+            'GET',
+            {},
+            function(response) {
+                if (response && !response.error) {
+                    console.log('albums:', response);
+                } else {
+                    console.log('albums error:', response);
+                }
+            }
+        );
+    }
+
+    getPhotos() {
+        window.FB.api(
+            '/me/photos?fields=album',
+            'GET',
+            {},
+            function(response) {
+                if (response && !response.error) {
+                    console.log('photos:', response);
+                } else {
+                    console.log('photos error:', response);
+                }
+            }
+        );
     }
 
     render() {
+        console.log('state', this.state);
         return (
             <div>
                 {this.props.isRequesting ? <div className="fader"></div> : null}
-                <Link to="/register"><RaisedButton label="Register" secondary={true} style={{width: '120px', color: 'black', position: 'absolute', top: 30, right: 35}} /></Link>
-
-                <div className="auth-wrapper">
-                    <div className="auth auth-logo"></div>
-                    <div className="auth-divider"></div>
-                    <form onSubmit={this.onSubmit} className="auth auth-form">
-                        <div>
-                            <TextField
-                                fullWidth={true}
-                                name="emailValue"
-                                hintText="Enter your email"
-                                floatingLabelText="Email*"
-                                errorText={this.state.emailValueErrorText}
-                                onChange={(event, newValue) => this.onInput(event, newValue)}
-                            />
-                        </div>
-                        <div>
-                            <TextField
-                                fullWidth={true}
-                                name="passwordValue"
-                                hintText="Enter password"
-                                floatingLabelText="Password*"
-                                type="password"
-                                errorText={this.state.passwordValueErrorText}
-                                onChange={(event, newValue) => this.onInput(event, newValue)}
-                            />
-                        </div>
-                        <div className="auth-raised-button">
-                            <RaisedButton
-                                type="submit"
-                                label="Login"
-                                primary={true}
-                                style={{margin: '15px'}}
-                            />
-                        </div>
-                    </form>
-                </div>
+                <RaisedButton
+                    label="Login"
+                    primary={true}
+                    style={{margin: '15px'}}
+                    onClick={this.login}
+                />
+                <RaisedButton
+                    label="Logout"
+                    secondary={true}
+                    style={{margin: '15px'}}
+                    onClick={this.logout}
+                />
+                <RaisedButton
+                    label="Status"
+                    style={{margin: '15px'}}
+                    onClick={this.status}
+                />
+                <RaisedButton
+                    label="Albums"
+                    primary={true}
+                    style={{margin: '15px'}}
+                    onClick={this.getAlbums}
+                />
             </div>
         )
     }
