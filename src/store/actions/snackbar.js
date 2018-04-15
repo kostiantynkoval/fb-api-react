@@ -8,10 +8,8 @@ import {
 
 export const showSnackbarAction = (message) => dispatch => {
     dispatch(apiRequest(SNACKBAR_SHOW, message));
-
-}
+};
 
 export const hideSnackbarAction = () => dispatch => {
     dispatch(apiSuccess(SNACKBAR_HIDE));
-
-}
+};

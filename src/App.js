@@ -1,17 +1,23 @@
 import React, { Component } from 'react';
-import {connect} from 'react-redux';
-import {withRouter} from 'react-router-dom';
-import {loginAction} from './store/actions/auth';
-
-import { Route } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { withRouter, Route } from 'react-router-dom';
 import { Redirect } from 'react-router';
-import Desk from './components/desk/Dashboard/Dashboard';
-import Login from './components/auth/Login/Login';
+import { checkUserStatusAction } from './store/actions/auth';
+import { hideSnackbarAction } from './store/actions/snackbar';
 
+import Dashboard from './components/desk/Dashboard/Dashboard';
+import Login from './components/auth/Login/Login';
 import Snackbar from 'material-ui/Snackbar';
-import {hideSnackbarAction} from "./store/actions/snackbar";
 
 class App extends Component {
+
+    constructor(props) {
+        super(props)
+    }
+
+    componentDidMount() {
+        this.props.checkUserStatusAction();
+    }
 
     handleRequestClose = () => {
         this.props.hideSnackbarAction();
@@ -23,12 +29,10 @@ class App extends Component {
                 {this.props.isRequesting ? <div className="fader"></div> : null}
                 <main>
                     <Route exact={true} path="/" render={() => (
-                        <Desk/>
-                        // this.props.isLoggedIn ? (<Desk/>) : (<Redirect to="/login" />)
+                        this.props.authStatus === 'connected' ? (<Dashboard/>) : (<Redirect to="/login" />)
                     )} />
                     <Route exact path="/login" render={() => (
-                        <Login/>
-                        // !this.props.isLoggedIn ? (<Login/>) : (<Redirect to="/" />)
+                        this.props.authStatus !== 'connected' ? (<Login/>) : (<Redirect to="/" />)
                     )} />
                 </main>
 
@@ -44,18 +48,17 @@ class App extends Component {
 }
 
 const mapDispatchToProps = dispatch => ({
-    loginAction: (loginObj) => {
-        dispatch(loginAction(loginObj));
-    },
     hideSnackbarAction: () => {
         dispatch(hideSnackbarAction());
     },
+    checkUserStatusAction: () => {
+        dispatch(checkUserStatusAction());
+    }
 });
 
 const mapStateToProps = state => ({
     isRequesting: state.auth.isRequesting,
-    isLoggedIn: state.auth.isLoggedIn,
-    token: state.auth.token,
+    authStatus: state.auth.authStatus,
     snackbarMessage: state.snackbar.snackbarMessage
 });
 

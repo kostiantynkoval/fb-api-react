@@ -2,52 +2,113 @@ import React from 'react'
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
 import {logoutAction} from '../../../store/actions/auth';
-import Facebook from '../../auth/Login/facebook';
+import RaisedButton from 'material-ui/RaisedButton';
+import {Tabs, Tab} from 'material-ui/Tabs';
+import UploadsBoard from '../UploadsBoard/UploadsBoard';
+import PhotosBoard from '../PhotosBoard/PhotosBoard';
 
+const styles = {
+    headline: {
+        fontSize: 24,
+        paddingTop: 16,
+        marginBottom: 12,
+        fontWeight: 400,
+    },
+};
 
 class Dashboard extends React.Component {
 
     constructor(props) {
         super(props);
-        this.handleLogout = this.handleLogout.bind(this);
-    }
-
-    componentDidMount() {
-        const facebookAPI = new Facebook();
-
-
-        facebookAPI.getLoginStatus(function(response){
-            if(response.status === "connected"){
-                console.log('response.status', response);
-            }
-        }.bind(this));
-
-
-
-        console.log('facebookAPI', facebookAPI);
-        console.log('state', this.state);
+        this.logout = this.logout.bind(this);
+        this.status = this.status.bind(this);
+        this.getAlbums = this.getAlbums.bind(this);
+        this.getPhotos = this.getPhotos.bind(this);
     }
 
     logout() {
-        window.FB.logout(function(response) {
-            if (response && !response.error) {
-                console.log('logout:', response);
-            } else {
-                console.log('logout error:', response);
-            }
-        });
-    }
-
-    handleLogout() {
         this.props.logoutAction();
     }
 
+    status() {
+        window.FB.getLoginStatus(function(response){
+            console.log('response.status', response);
+        });
+    }
+
+    getAlbums() {
+        window.FB.api(
+            '/me/albums',
+            'GET',
+            {},
+            function(response) {
+                if (response && !response.error) {
+                    console.log('albums:', response);
+                } else {
+                    console.log('albums error:', response);
+                }
+            }
+        );
+    }
+
+    getPhotos() {
+        window.FB.api(
+            '/me/photos?fields=album',
+            'GET',
+            {},
+            function(response) {
+                if (response && !response.error) {
+                    console.log('photos:', response);
+                } else {
+                    console.log('photos error:', response);
+                }
+            }
+        );
+    }
 
     render() {
         return (
             <div>
                 {/* Fader for requests */}
                 {this.props.isAuthRequesting || this.props.isDeskRequesting ? <div className="fader"></div> : null}
+
+                <Tabs>
+                    <Tab
+                        label="Photos"
+                    >
+                        <PhotosBoard/>
+                    </Tab>
+                    <Tab
+                        label="Uploads"
+                    >
+                        <UploadsBoard/>
+                    </Tab>
+                </Tabs>
+
+
+                <RaisedButton
+                    label="Logout"
+                    secondary={true}
+                    style={{margin: '15px'}}
+                    onClick={this.logout}
+                />
+                <RaisedButton
+                    label="Photos"
+                    primary={true}
+                    style={{margin: '15px'}}
+                    onClick={this.getPhotos}
+                />
+                <RaisedButton
+                    label="Status"
+                    style={{margin: '15px'}}
+                    onClick={this.status}
+                />
+                <RaisedButton
+                    label="Albums"
+                    primary={true}
+                    style={{margin: '15px'}}
+                    onClick={this.getAlbums}
+                />
             </div>
         )
     }
