@@ -8,7 +8,7 @@ class Facebook{
                         appId      : '120359432010284',
                         cookie     : true,
                         autoLogAppEvents : true,
-                        xfbml      : true,
+                        xfbml      : false,
                         version    : 'v2.12'
                     });
                     resolve();

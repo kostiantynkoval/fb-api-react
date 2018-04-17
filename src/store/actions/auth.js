@@ -1,6 +1,5 @@
 import {push} from 'react-router-redux';
 import {apiRequest, apiSuccess, apiFail} from '../actions/api';
-import {showSnackbarAction} from '../actions/snackbar';
 import Facebook from '../facebook';
 import {
     LOGIN_REQUEST,
@@ -12,6 +11,9 @@ import {
     CHECK_USER_STATUS_REQUEST,
     CHECK_USER_STATUS_SUCCESS,
     CHECK_USER_STATUS_FAIL,
+    GET_USER_REQUEST,
+    GET_USER_SUCCESS,
+    GET_USER_FAIL,
     SNACKBAR_SHOW
 } from '../constants';
 
@@ -24,11 +26,30 @@ export const checkUserStatusAction = () => dispatch => {
     fbAPI.getLoginStatus(function(response){
 
         if (response && !response.error) {
-            dispatch(apiSuccess(CHECK_USER_STATUS_SUCCESS, response.status));
+            dispatch(apiSuccess(CHECK_USER_STATUS_SUCCESS, response));
+            dispatch(getUserAction())
         }else {
             dispatch(apiFail(CHECK_USER_STATUS_FAIL));
         }
     });
+};
+
+export const getUserAction = () => dispatch => {
+    dispatch(apiRequest(GET_USER_REQUEST));
+
+    window.FB.api(
+        '/me',
+        'GET',
+        { fields: 'first_name, last_name'},
+        function(response) {
+            if (response && !response.error) {
+                dispatch(apiSuccess(GET_USER_SUCCESS, response));
+            } else {
+                dispatch(apiFail(GET_USER_FAIL, response.status));
+                console.log('getUser result error:', response);
+            }
+        }
+    );
 };
 
 export const loginAction = loginData => dispatch => {
@@ -40,6 +61,9 @@ export const loginAction = loginData => dispatch => {
                 dispatch(apiSuccess(LOGIN_SUCCESS, response.status));
                 dispatch(apiSuccess(SNACKBAR_SHOW, 'Login successfully!'));
                 dispatch(push('/'));
+                window.FB.api('/me/permissions', (response) => {
+                    console.log('permissions', response)
+                })
             } else {
                 dispatch(apiFail(LOGIN_FAIL, response.status));
                 dispatch(apiFail(SNACKBAR_SHOW, 'Login failed!'));
@@ -51,7 +75,7 @@ export const loginAction = loginData => dispatch => {
             dispatch(apiFail(SNACKBAR_SHOW, 'Login failed!'));
             dispatch(push('/login'));
         }
-    });
+    }, {scope: 'publish_actions, user_photos, manage_pages, pages_show_list, publish_pages, public_profile, email'});
 };
 
 export const logoutAction = () => dispatch => {

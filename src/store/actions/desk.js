@@ -5,22 +5,14 @@ import {
     UPLOAD_FILES_REQUEST,
     UPLOAD_FILES_SUCCESS,
     UPLOAD_FILES_FAIL,
-    ADD_TODO_REQUEST,
-    ADD_TODO_SUCCESS,
-    ADD_TODO_FAIL,
-    REORDER_TODO_SUCCESS,
-    ADD_LIST_REQUEST,
-    ADD_LIST_SUCCESS,
-    ADD_LIST_FAIL,
-    RENAME_LIST_REQUEST,
-    RENAME_LIST_SUCCESS,
-    RENAME_LIST_FAIL,
-    REMOVE_LIST_REQUEST,
-    REMOVE_LIST_SUCCESS,
-    REMOVE_LIST_FAIL,
-    REORDER_LIST_SUCCESS,
-    LIST_MODAL_HIDE,
+    GET_ALBUMS_REQUEST,
+    GET_ALBUMS_SUCCESS,
+    GET_ALBUMS_FAIL,
+    GET_ALBUM_PHOTOS_REQUEST,
+    GET_ALBUM_PHOTOS_SUCCESS,
+    GET_ALBUM_PHOTOS_FAIL
 } from '../constants';
+import {apiFail} from "./api";
 
 
 // upload new item
@@ -30,9 +22,9 @@ export const uploadFilesAction = (items) => dispatch => {
     console.log('items to upload', items);
 
     window.FB.api(
-        '/580838048702436/photos/',
+        '/580838048702436/photos',
         'POST',
-        {'source': items},
+        { url: items },
         function(response) {
             if (response && !response.error) {
                 console.log('upload result:', response);
@@ -43,54 +35,41 @@ export const uploadFilesAction = (items) => dispatch => {
     );
 }
 
-//add new list
-export const addListAction = (items) => dispatch => {
-    dispatch(apiRequest(ADD_LIST_REQUEST));
+export const getAlbumsAction = () => dispatch => {
+    dispatch(apiRequest(GET_ALBUMS_REQUEST));
 
-    setTimeout(() => addTodo(), 500);
-    function addTodo() {
-        dispatch(apiSuccess(ADD_LIST_SUCCESS, items))
-    }
+    window.FB.api(
+        '/me/albums',
+        'GET',
+        { fields: 'count, cover_photo, updated_time, name'},
+        function(response) {
+            if (response && !response.error) {
+                dispatch(apiSuccess(GET_ALBUMS_SUCCESS, response));
 
+
+            } else {
+                console.log('albums error:', response);
+                dispatch(apiFail(GET_ALBUMS_FAIL));
+            }
+        }
+    );
 }
 
-// reordering items
-export const reorderTodoAction = todoData => dispatch => {
-    setTimeout(() => reorderTodo(), 500);
-    function reorderTodo() {
-        dispatch(apiSuccess(REORDER_TODO_SUCCESS, todoData))
-    }
+export const getAlbumByIdAction = () => dispatch => {
+    dispatch(apiRequest(GET_ALBUM_PHOTOS_REQUEST));
 
-}
-
-// reordering lists
-export const reorderListAction = listData => dispatch => {
-    setTimeout(() => reorderList(), 500);
-    function reorderList() {
-        dispatch(apiSuccess(REORDER_LIST_SUCCESS, listData))
-    }
-
-}
-
-// delete list
-export const removeListAction = items => dispatch => {
-    dispatch(apiRequest(REMOVE_LIST_REQUEST));
-
-    setTimeout(() => reorderList(), 500);
-    function reorderList() {
-        dispatch(apiSuccess(REMOVE_LIST_SUCCESS, items))
-    }
-
-}
-
-
-export const renameListAction = items => dispatch => {
-    dispatch(apiRequest(RENAME_LIST_REQUEST));
-
-    setTimeout(() => reorderList(), 500);
-    function reorderList() {
-        dispatch(apiSuccess(RENAME_LIST_SUCCESS, items))
-        dispatch(apiRequest(LIST_MODAL_HIDE))
-    }
-
+    window.FB.api(
+        `/580838048702436/photos`,
+        'GET',
+        {fields:"id",limit:"20"},
+        function(response) {
+            if (response && !response.error) {
+                console.log('album photos:', response);
+                dispatch(apiSuccess(GET_ALBUM_PHOTOS_SUCCESS, response));
+            } else {
+                console.log('album photos error:', response);
+                dispatch(apiFail(GET_ALBUM_PHOTOS_FAIL));
+            }
+        }
+    );
 }

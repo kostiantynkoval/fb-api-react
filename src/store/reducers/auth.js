@@ -7,12 +7,18 @@ import {
     LOGOUT_FAIL,
     CHECK_USER_STATUS_REQUEST,
     CHECK_USER_STATUS_SUCCESS,
-    CHECK_USER_STATUS_FAIL
+    CHECK_USER_STATUS_FAIL,
+    GET_USER_REQUEST,
+    GET_USER_SUCCESS,
+    GET_USER_FAIL,
 } from '../constants';
 
 const initialState = {
     isRequesting: false,
     authStatus: 'unknown',
+    first_name: '',
+    last_name: '',
+    token: ''
 };
 
 export default function (state = initialState, action) {
@@ -20,6 +26,7 @@ export default function (state = initialState, action) {
         case LOGIN_REQUEST:
         case LOGOUT_REQUEST:
         case CHECK_USER_STATUS_REQUEST:
+        case GET_USER_REQUEST:
             return {
                 ...state,
                 isRequesting: true,
@@ -29,7 +36,8 @@ export default function (state = initialState, action) {
             return {
                 ...state,
                 isRequesting: false,
-                authStatus: action.payload,
+                authStatus: action.payload.status,
+                token: action.payload.authResponse.accessToken
             };
         case LOGIN_FAIL:
         case CHECK_USER_STATUS_FAIL:
@@ -45,6 +53,18 @@ export default function (state = initialState, action) {
                 authStatus: 'unknown',
             };
         case LOGOUT_FAIL:
+            return {
+                ...state,
+                isRequesting: false,
+            };
+        case GET_USER_SUCCESS:
+            return {
+                ...state,
+                isRequesting: false,
+                first_name: action.payload.first_name,
+                last_name: action.payload.last_name
+            };
+        case GET_USER_FAIL:
             return {
                 ...state,
                 isRequesting: false,

@@ -20,14 +20,34 @@ class UploadsBoard extends React.Component {
 
 
     onDrop = (accepted, rejected) => {
-        const formData = new FormData();
-        accepted.forEach(file => {
+
+        const reader = [];
+        const result = [];
+        accepted.forEach((file, i) => {
+            reader[i] = new FileReader();
             console.log('file', file);
-            formData.append('files[]', file, file.name);
+            //formData.append('file', file, file.name);
+            //this.props.uploadFilesAction(file);
+            const that = this;
+            reader[i].addEventListener("load", function () {
+                result[i] = reader[i].result;
+                console.log(result[i]);
+                that.props.uploadFilesAction(result[i]);
+            }, false);
+
+            if (file) {
+                reader[i].readAsBinaryString(file);
+            }
+
         });
 
+
+
         this.setState({ completed: 0, accepted, rejected });
-        this.props.uploadFilesAction(formData);
+        //formData.setAttribute('enctype', 'multipart/form-data');
+
+        //console.log(formData.getAll('file'));
+
 
 
 
@@ -63,7 +83,6 @@ class UploadsBoard extends React.Component {
     };
 
     render() {
-        console.log(this.state);
         const divStyle = {
             border: '1px solid black',
             minHeight: '100px',
@@ -82,7 +101,6 @@ class UploadsBoard extends React.Component {
                         )) :
                         (<div>Try dropping some files here, or click to select files to upload.</div>)
                     }
-                    <div>{this.state.completed}</div>
                 </Dropzone>
             </div>
         );

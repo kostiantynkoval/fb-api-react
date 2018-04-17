@@ -1,7 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
-import {loginAction, logoutAction, checkUserStatusAction} from '../../../store/actions/auth';
+import {loginAction} from '../../../store/actions/auth';
 import RaisedButton from 'material-ui/RaisedButton';
 
 class Login extends React.Component {

@@ -5,11 +5,11 @@
     width: 200px;
     height: 200px;
     position: relative;
+    overflow: hidden;
 }
 .imageWrapper img {
     width: 100%;
     height: auto;
-    overflow: hidden;
 }
 .bg-gray {
     position: absolute;
