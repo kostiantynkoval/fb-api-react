@@ -33,7 +33,7 @@ export const uploadFilesAction = (items) => dispatch => {
             }
         }
     );
-}
+};
 
 export const getAlbumsAction = () => dispatch => {
     dispatch(apiRequest(GET_ALBUMS_REQUEST));
@@ -53,15 +53,15 @@ export const getAlbumsAction = () => dispatch => {
             }
         }
     );
-}
+};
 
-export const getAlbumByIdAction = () => dispatch => {
+export const getAlbumByIdAction = (id) => dispatch => {
     dispatch(apiRequest(GET_ALBUM_PHOTOS_REQUEST));
 
     window.FB.api(
-        `/580838048702436/photos`,
+        `/${id}/photos`,
         'GET',
-        {fields:"id",limit:"20"},
+        {fields:"id, name, created_time",limit:"20"},
         function(response) {
             if (response && !response.error) {
                 console.log('album photos:', response);
@@ -72,4 +72,4 @@ export const getAlbumByIdAction = () => dispatch => {
             }
         }
     );
-}
+};

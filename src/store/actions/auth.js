@@ -58,9 +58,9 @@ export const loginAction = loginData => dispatch => {
     window.FB.login(function(response) {
         if (response && !response.error) {
             if (response.status === 'connected') {
-                dispatch(apiSuccess(LOGIN_SUCCESS, response.status));
+                dispatch(apiSuccess(LOGIN_SUCCESS, response));
                 dispatch(apiSuccess(SNACKBAR_SHOW, 'Login successfully!'));
-                dispatch(push('/'));
+                dispatch(push('/photos'));
                 window.FB.api('/me/permissions', (response) => {
                     console.log('permissions', response)
                 })

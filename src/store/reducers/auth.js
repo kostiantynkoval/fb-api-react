@@ -33,11 +33,13 @@ export default function (state = initialState, action) {
             };
         case LOGIN_SUCCESS:
         case CHECK_USER_STATUS_SUCCESS:
+            console.log('action', action.payload);
+            const token = (action.payload.status === 'connected') ? action.payload.authResponse.accessToken : '';
             return {
                 ...state,
                 isRequesting: false,
                 authStatus: action.payload.status,
-                token: action.payload.authResponse.accessToken
+                token: token
             };
         case LOGIN_FAIL:
         case CHECK_USER_STATUS_FAIL:
@@ -45,12 +47,14 @@ export default function (state = initialState, action) {
                 ...state,
                 isRequesting: false,
                 authStatus: 'unknown',
+                token: ''
             };
         case LOGOUT_SUCCESS:
             return {
                 ...state,
                 isRequesting: false,
                 authStatus: 'unknown',
+                token: ''
             };
         case LOGOUT_FAIL:
             return {

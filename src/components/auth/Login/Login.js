@@ -2,7 +2,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
 import {loginAction} from '../../../store/actions/auth';
-import RaisedButton from 'material-ui/RaisedButton';
+import Button from 'material-ui/Button';
 
 class Login extends React.Component {
 
@@ -19,12 +19,12 @@ class Login extends React.Component {
         return (
             <div>
                 {this.props.isRequesting ? <div className="fader"></div> : null}
-                <RaisedButton
-                    label="Login"
-                    primary={true}
+                <Button
+                    variant="raised"
+                    color="primary"
                     style={{margin: '15px'}}
                     onClick={this.login}
-                />
+                >Login</Button>
             </div>
         )
     }

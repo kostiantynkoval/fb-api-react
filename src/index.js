@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 import { Provider } from 'react-redux'
 import { ConnectedRouter } from 'react-router-redux'
@@ -13,9 +12,7 @@ import registerServiceWorker from './registerServiceWorker';
 const AppComponent = () => (
     <Provider store={store}>
         <ConnectedRouter history={history}>
-            <MuiThemeProvider>
-                <App />
-            </MuiThemeProvider>
+            <App />
         </ConnectedRouter>
     </Provider>
 );

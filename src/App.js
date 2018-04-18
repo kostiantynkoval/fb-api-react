@@ -19,9 +19,6 @@ class App extends Component {
 
     componentDidMount() {
         this.props.checkUserStatusAction();
-        /*const vk = new VK();
-        vk.initVKScript();
-        console.log(window.VK);*/
     }
 
     handleRequestClose = () => {
@@ -29,14 +26,15 @@ class App extends Component {
     };
 
     render() {
+        console.log('authStatus', this.props.authStatus);
         return (
             <div>
                 {this.props.isRequesting ? <div className="fader"></div> : null}
                 <main>
                     <Route path="/" render={() => (
-                        this.props.authStatus === 'connected' ? (<Dashboard/>) : (<Redirect to="/photos" />)
+                        this.props.authStatus === 'connected' ? (<Dashboard/>) : null
                     )} />
-                    <Route exact path="/login" render={() => (
+                    <Route path="/login" render={() => (
                         this.props.authStatus !== 'connected' ? (<Login/>) : (<Redirect to="/" />)
                     )} />
                 </main>

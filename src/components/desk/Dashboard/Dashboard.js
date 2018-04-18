@@ -1,15 +1,15 @@
 import React from 'react'
 import {connect} from 'react-redux';
 import { push } from 'react-router-redux';
-import {withRouter, Switch, Route} from 'react-router-dom';
+import {withRouter, Route, Redirect} from 'react-router-dom';
 import {logoutAction} from '../../../store/actions/auth';
-import RaisedButton from 'material-ui/RaisedButton';
-import {BottomNavigation, BottomNavigationItem} from 'material-ui/BottomNavigation';
+import Button from 'material-ui/Button';
+import BottomNavigation, { BottomNavigationAction } from 'material-ui/BottomNavigation';
 import {Toolbar, ToolbarGroup} from 'material-ui/Toolbar';
-import IconLocationOn from 'material-ui/svg-icons/communication/location-on';
-import Favorite from 'material-ui/svg-icons/action/favorite';
-import FileUpload from 'material-ui/svg-icons/file/file-upload';
-import Photos from 'material-ui/svg-icons/image/collections';
+import IconLocationOn from '@material-ui/icons/LocationOn';
+import Favorite from '@material-ui/icons/Favorite';
+import FileUpload from '@material-ui/icons/FileUpload';
+import Photos from '@material-ui/icons/Collections';
 import UploadsBoard from '../UploadsBoard/UploadsBoard';
 import PhotosBoard from '../PhotosBoard/PhotosBoard';
 import AlbumBoard from '../AlbumBoard/AlbumBoard';
@@ -32,13 +32,15 @@ class Dashboard extends React.Component {
         this.getPhotos = this.getPhotos.bind(this);
         this.select = this.select.bind(this);
         this.state = {
-            selectedIndex: 0,
+            value: '/photos',
         };
+        console.log(this.props);
     }
 
-    select(index, path) {
-        this.setState({selectedIndex: index});
-        this.props.push(path);
+    select(event, value) {
+        this.setState({value});
+
+        this.props.push(`${value}`);
 
     }
 
@@ -73,56 +75,38 @@ class Dashboard extends React.Component {
                 {/* Fader for requests */}
                 {/*{this.props.isAuthRequesting || this.props.isDeskRequesting ? <div className="fader"></div> : null}*/}
 
-                    <BottomNavigation selectedIndex={this.state.selectedIndex}>
-                        <BottomNavigationItem
+                    <BottomNavigation value={this.state.value} onChange={this.select}>
+                        <BottomNavigationAction
                             label="Photos"
                             icon={<Photos/>}
-                            onClick={() => this.select(0, '/photos')}
+                            value="/photos"
                         />
-                        <BottomNavigationItem
+                        <BottomNavigationAction
                             label="Favorites"
                             icon={<Favorite/>}
-                            onClick={() => this.select(1, '/favorites')}
+                            value="/favorites"
                         />
-                        <BottomNavigationItem
-                            label="Nearby"
+                        <BottomNavigationAction
+                            label="Location"
                             icon={<IconLocationOn/>}
-                            onClick={() => this.select(2, '/location')}
+                            value="/location"
                         />
-                        <BottomNavigationItem
+                        <BottomNavigationAction
                             label="Upload to Facebook"
                             icon={<FileUpload/>}
-                            onClick={() => this.select(3, '/uploads')}
+                            value="/uploads"
                         />
                     </BottomNavigation>
 
-                {/*<div>*/}
-
-                <RaisedButton
-                    label="Logout"
-                    secondary={true}
+                <Button
+                    variant="raised"
+                    color="secondary"
                     style={{margin: '15px'}}
                     onClick={this.logout}
-                />
-                {/*<RaisedButton*/}
-                    {/*label="Photos"*/}
-                    {/*primary={true}*/}
-                    {/*style={{margin: '15px'}}*/}
-                    {/*onClick={this.getPhotos}*/}
-                {/*/>*/}
-                {/*<RaisedButton*/}
-                    {/*label="Status"*/}
-                    {/*style={{margin: '15px'}}*/}
-                    {/*onClick={this.status}*/}
-                {/*/>*/}
-                {/*<RaisedButton*/}
-                    {/*label="Albums"*/}
-                    {/*primary={true}*/}
-                    {/*style={{margin: '15px'}}*/}
-                    {/*onClick={this.getAlbums}*/}
-                {/*/>*/}
-                {/*</div>*/}
+                >Logout</Button>
 
+
+                <Route exact path="/" render={() => (<Redirect to='/photos'/>)}/>
                 <Route exact={true} path="/photos" render={() => (<PhotosBoard/>)}/>
                 <Route path="/photos/:id" render={() => (<AlbumBoard/>)}/>
                 <Route path="/favorites" render={() => (<div><h1>Favorites Component</h1></div>)}/>

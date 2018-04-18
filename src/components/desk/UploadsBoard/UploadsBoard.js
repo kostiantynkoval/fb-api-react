@@ -2,7 +2,7 @@ import React from 'react'
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
 import Dropzone from "react-dropzone";
-import LinearProgress from 'material-ui/LinearProgress';
+import LinearProgress from 'material-ui/Progress';
 import {uploadFilesAction} from '../../../store/actions/desk';
 import './UploadsBoard.css';
 
