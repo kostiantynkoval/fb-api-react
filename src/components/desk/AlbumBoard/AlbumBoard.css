@@ -4,15 +4,15 @@
     justify-content: space-between;
     align-items: flex-start;
     align-content: flex-start;
-    padding-bottom: 5px;
+    padding-bottom: 2px;
 }
 .photo-item {
     display: block;
     position: relative;
-    width: 18%;
-    height: 250px;
+    width: 10.2%;
+    height: 150px;
     border: 2px solid rgba(0,0,0,0.5);
-    margin: 5px 5px 0 5px;
+    margin: 2px 2px 0 2px;
     border-radius: 5px;
     background-repeat: no-repeat;
     background-position: center center;
@@ -24,18 +24,18 @@
     overflow: hidden;
 }
 
-@media screen and (max-width: 786px) {
+@media screen and (max-width: 960px) {
     .photo-item {
-        width: 22%;
+        width: 18.6%;
     }
 }
 @media screen and (max-width: 600px) {
     .photo-item {
-        width: 47%;
+        width: 31%;
     }
 }
 @media screen and (max-width: 483px) {
     .photo-item {
-        width: 98%;
+        width: 47%;
     }
 }

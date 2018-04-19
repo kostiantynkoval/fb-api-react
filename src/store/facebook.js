@@ -13,7 +13,7 @@ class Facebook{
                     });
                     resolve();
                 };
-                if (typeof(window.FB) == 'undefined') {
+                if (typeof(window.FB) === 'undefined') {
                     ((d, s, id) => {
                         let js;
                         const fjs = d.getElementsByTagName(s)[0];

@@ -1,0 +1,31 @@
+.single-photo-wrapper {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+.single-photo {
+    display: block;
+    border: 2px solid rgba(0,0,0,0.5);
+    margin: 2px 2px 0 2px;
+    border-radius: 5px;
+    max-width: 750px;
+    object-fit: contain;
+}
+
+@media screen and (max-width: 960px) {
+    .single-photo {
+        max-width: 500px;
+    }
+}
+@media screen and (max-width: 600px) {
+    .single-photo {
+        max-width: 400px;
+    }
+}
+@media screen and (max-width: 483px) {
+    .single-photo {
+        max-width: 300px;
+    }
+}

@@ -42,7 +42,7 @@ class App extends Component {
                 <Snackbar
                     open={this.props.snackbarMessage !== ''}
                     message={this.props.snackbarMessage}
-                    onRequestClose={this.handleRequestClose}
+                    onClose={this.handleRequestClose}
                 />
 
             </div>

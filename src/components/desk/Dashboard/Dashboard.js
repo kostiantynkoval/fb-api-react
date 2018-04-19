@@ -13,6 +13,7 @@ import Photos from '@material-ui/icons/Collections';
 import UploadsBoard from '../UploadsBoard/UploadsBoard';
 import PhotosBoard from '../PhotosBoard/PhotosBoard';
 import AlbumBoard from '../AlbumBoard/AlbumBoard';
+import SinglePhotoWrapper from '../SinglePhoto/SinglePhoto';
 
 const styles = {
     headline: {
@@ -29,10 +30,9 @@ class Dashboard extends React.Component {
         super(props);
         this.logout = this.logout.bind(this);
         this.status = this.status.bind(this);
-        this.getPhotos = this.getPhotos.bind(this);
         this.select = this.select.bind(this);
         this.state = {
-            value: '/photos',
+            value: this.props.location.pathname,
         };
         console.log(this.props);
     }
@@ -52,21 +52,6 @@ class Dashboard extends React.Component {
         window.FB.getLoginStatus(function(response){
             console.log('response.status', response);
         });
-    }
-
-    getPhotos() {
-        window.FB.api(
-            '/me/photos?fields=album',
-            'GET',
-            {},
-            function(response) {
-                if (response && !response.error) {
-                    console.log('photos:', response);
-                } else {
-                    console.log('photos error:', response);
-                }
-            }
-        );
     }
 
     render() {
@@ -109,6 +94,7 @@ class Dashboard extends React.Component {
                 <Route exact path="/" render={() => (<Redirect to='/photos'/>)}/>
                 <Route exact={true} path="/photos" render={() => (<PhotosBoard/>)}/>
                 <Route path="/photos/:id" render={() => (<AlbumBoard/>)}/>
+                <Route path="/photo/:id" render={() => (<SinglePhotoWrapper/>)}/>
                 <Route path="/favorites" render={() => (<div><h1>Favorites Component</h1></div>)}/>
                 <Route path="/location" render={() => (<div><h1>Location Component</h1></div>)}/>
                 <Route path="/uploads" render={() => (<UploadsBoard/>)}/>

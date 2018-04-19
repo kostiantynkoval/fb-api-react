@@ -1,7 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
-import {getAlbumByIdAction} from '../../../store/actions/desk';
+import {getAlbumByIdAction, getMorePhotosAction} from '../../../store/actions/desk';
 import Toolbar from 'material-ui/Toolbar';
 import Typography from 'material-ui/Typography';
 import qs from 'query-string';
@@ -9,6 +9,7 @@ import Prev from '@material-ui/icons/KeyboardArrowLeft';
 import Folder from '@material-ui/icons/Folder';
 import Paper from 'material-ui/Paper';
 import './AlbumBoard.css';
+import { fromEvent } from 'rxjs/observable/fromEvent';
 
 
 class AlbumBoard extends React.Component {
@@ -16,12 +17,33 @@ class AlbumBoard extends React.Component {
     constructor(props) {
         super(props);
         this.showPhoto = this.showPhoto.bind(this);
-        this.handleClick = this.handleClick.bind(this);
-        this.handleRequestClose = this.handleRequestClose.bind(this);
-        console.log(this.props);
         this.state = {
             query: {},
-            open: false
+            open: false,
+            isNextDone: false
+        };
+        //Implementing lazy load on scroll
+        const scrollObservable = fromEvent(document, 'scroll');
+        this.scroll = scrollObservable.subscribe(val => {
+            if (this.props.isPhotosNext && !this.state.isNextDone && window.pageYOffset + window.innerHeight > document.body.offsetHeight - (window.innerHeight/10)) {
+                this.props.getMorePhotosAction(this.props.match.params.id, this.props.photosPaging);
+            }
+
+        });
+    }
+
+    //Getting more photos if big screen, no scroll, but more photos available
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (this.props.isPhotosNext && !this.state.isNextDone && (window.innerHeight > document.body.offsetHeight)) {
+            this.props.getMorePhotosAction(this.props.match.params.id, this.props.photosPaging);
+        }
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if ( this.props.photosPaging !=='' && nextProps.photosPaging === this.props.photosPaging) {
+            this.setState({isNextDone: true});
+        } else {
+            this.setState({isNextDone: false});
         }
     }
 
@@ -31,24 +53,12 @@ class AlbumBoard extends React.Component {
         this.setState({query});
     }
 
-    handleClick = (event) => {
-        // This prevents ghost click.
-        event.preventDefault();
-
-        this.setState({
-            open: true,
-            anchorEl: event.currentTarget,
-        });
-    };
-
-    handleRequestClose = () => {
-        this.setState({
-            open: false,
-        });
-    };
-
     showPhoto(id) {
         this.props.history.push(`/photo/${id}`)
+    }
+
+    componentWillUnmount() {
+        this.scroll.unsubscribe();
     }
 
     render() {
@@ -61,10 +71,10 @@ class AlbumBoard extends React.Component {
                         &nbsp;{this.state.query.name}
                     </Typography>
                 </Toolbar>
-                {this.props.currentAlbumPhotos.length ?
+                {this.props.photos.length ?
                     <Paper className="photo-container">
-                        {this.props.currentAlbumPhotos.map(photoItem => (
-                            <div onClick={() => this.showPhoto()} className="photo-item" style={{backgroundImage: `url(http://graph.facebook.com/${photoItem.id}/picture?access_token=${this.props.token})`}}></div>
+                        {this.props.photos.map(photoItem => (
+                            <div key={`${photoItem.id}${this.props.photosPaging}`} onClick={() => this.showPhoto(photoItem.id)} className="photo-item" style={{backgroundImage: `url(http://graph.facebook.com/${photoItem.id}/picture?access_token=${this.props.token})`}}></div>
                         ))}
                 </Paper> : null }
             </div>
@@ -75,14 +85,19 @@ class AlbumBoard extends React.Component {
 const mapDispatchToProps = dispatch => ({
     getAlbumByIdAction: (id) => {
         dispatch(getAlbumByIdAction(id));
+    },
+    getMorePhotosAction: (id, after) => {
+        dispatch(getMorePhotosAction(id, after))
     }
+
 });
 
 const mapStateToProps = state => ({
     isDeskRequesting: state.desk.isRequesting,
     first_name: state.auth.first_name,
-    currentAlbumPhotos: state.desk.currentAlbumPhotos,
-    currentAlbumPaging: state.desk.currentAlbumPaging,
+    photos: state.desk.photos,
+    photosPaging: state.desk.photosPaging,
+    isPhotosNext: state.desk.isPhotosNext,
     token: state.auth.token
 });
 

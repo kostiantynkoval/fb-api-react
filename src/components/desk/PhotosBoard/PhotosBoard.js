@@ -1,9 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
-//import {history} from '../../../store/store';
-import {getAlbumsAction} from '../../../store/actions/desk';
-import AppBar from 'material-ui/AppBar';
+import {getAlbumsAction, getMoreAlbumsAction} from '../../../store/actions/desk';
 import Toolbar from 'material-ui/Toolbar';
 import Typography from 'material-ui/Typography';
 import Next from '@material-ui/icons/KeyboardArrowRight';
@@ -13,6 +11,7 @@ import List, {
     ListItem,
     ListItemAvatar
 } from 'material-ui/List';
+import { fromEvent } from 'rxjs/observable/fromEvent';
 
 const styles = {
     cardContainer: {
@@ -46,6 +45,32 @@ class PhotosBoard extends React.Component {
     constructor(props) {
         super(props);
         this.showAlbum = this.showAlbum.bind(this);
+        this.state = {
+            isNextDone: false
+        };
+        //Implementing lazy load on scroll
+        const scrollObservable = fromEvent(document, 'scroll');
+        this.scroll = scrollObservable.subscribe(val => {
+            if (this.props.isAlbumsNext && !this.state.isNextDone && window.pageYOffset + window.innerHeight > document.body.offsetHeight - (window.innerHeight/10)) {
+                this.props.getMoreAlbumsAction(this.props.albumsPaging);
+            }
+
+        });
+    }
+
+    //Getting more photos if big screen, no scroll, but more photos available
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (this.props.isAlbumsNext && !this.state.isNextDone && (window.innerHeight > document.body.offsetHeight)) {
+            this.props.getMoreAlbumsAction(this.props.albumsPaging);
+        }
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if ( this.props.albumsPaging !=='' && nextProps.albumsPaging === this.props.albumsPaging) {
+            this.setState({isNextDone: true});
+        } else {
+            this.setState({isNextDone: false});
+        }
     }
 
     componentDidMount() {
@@ -62,17 +87,15 @@ class PhotosBoard extends React.Component {
     render() {
         return (
             <div>
-                {/*<AppBar>*/}
-                    <Toolbar style={{backgroundColor: 'cadetblue'}}>
-                        <Typography variant="title" color="inherit" >
-                            {`Welcome, ${this.props.first_name}`}
-                        </Typography>
-                    </Toolbar>
-                {/*</AppBar>*/}
-                {this.props.albums.data ? (
+                <Toolbar style={{backgroundColor: 'cadetblue'}}>
+                    <Typography variant="title" color="inherit" >
+                        {`Welcome, ${this.props.first_name}`}
+                    </Typography>
+                </Toolbar>
+                {this.props.albums.length ? (
                     <Paper elevation={2} >
                         <List dense={true}>
-                            {this.props.albums.data.map(item => (
+                            {this.props.albums.map(item => (
                                 <ListItem
                                     dense
                                     button
@@ -121,6 +144,9 @@ class PhotosBoard extends React.Component {
 const mapDispatchToProps = dispatch => ({
     getAlbumsAction: () => {
         dispatch(getAlbumsAction());
+    },
+    getMoreAlbumsAction: (after) => {
+        dispatch(getMoreAlbumsAction(after));
     }
 });
 
@@ -128,6 +154,8 @@ const mapStateToProps = state => ({
     isDeskRequesting: state.desk.isRequesting,
     first_name: state.auth.first_name,
     albums: state.desk.albums,
+    albumsPaging: state.desk.albumsPaging,
+    isAlbumsNext: state.desk.isAlbumsNext,
     token: state.auth.token
 });
 

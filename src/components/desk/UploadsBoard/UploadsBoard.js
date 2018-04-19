@@ -2,7 +2,7 @@ import React from 'react'
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
 import Dropzone from "react-dropzone";
-import LinearProgress from 'material-ui/Progress';
+import {LinearProgress} from 'material-ui/Progress';
 import {uploadFilesAction} from '../../../store/actions/desk';
 import './UploadsBoard.css';
 
@@ -96,7 +96,7 @@ class UploadsBoard extends React.Component {
                         this.state.accepted.map(file => (
                             <div className='frameWrapper' key={file.name} >
                                 <div className='imageWrapper'><img src={file.preview} width={200} height={200} alt=""/><div style={{width: 200, height: 200}} className={this.state.completed === 100 ? 'bg-gray' : 'bg-gray active'}></div></div>
-                                <div className='progress-line'><LinearProgress mode="determinate" value={this.state.completed} /></div>
+                                <div className='progress-line'><LinearProgress variant="determinate" value={this.state.completed} /></div>
                             </div>
                         )) :
                         (<div>Try dropping some files here, or click to select files to upload.</div>)
