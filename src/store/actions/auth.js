@@ -61,9 +61,6 @@ export const loginAction = loginData => dispatch => {
                 dispatch(apiSuccess(LOGIN_SUCCESS, response));
                 dispatch(apiSuccess(SNACKBAR_SHOW, 'Login successfully!'));
                 dispatch(push('/photos'));
-                window.FB.api('/me/permissions', (response) => {
-                    console.log('permissions', response)
-                })
             } else {
                 dispatch(apiFail(LOGIN_FAIL, response.status));
                 dispatch(apiFail(SNACKBAR_SHOW, 'Login failed!'));
@@ -82,7 +79,6 @@ export const logoutAction = () => dispatch => {
     dispatch(apiRequest(LOGOUT_REQUEST));
 
     window.FB.logout(function(response) {
-        console.log('response', response);
         if (response && !response.error) {
             dispatch(apiSuccess(LOGOUT_SUCCESS, response.status));
             dispatch(apiSuccess(SNACKBAR_SHOW, 'Logout successfully!'));

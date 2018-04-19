@@ -5,7 +5,6 @@ import {withRouter, Route, Redirect} from 'react-router-dom';
 import {logoutAction} from '../../../store/actions/auth';
 import Button from 'material-ui/Button';
 import BottomNavigation, { BottomNavigationAction } from 'material-ui/BottomNavigation';
-import {Toolbar, ToolbarGroup} from 'material-ui/Toolbar';
 import IconLocationOn from '@material-ui/icons/LocationOn';
 import Favorite from '@material-ui/icons/Favorite';
 import FileUpload from '@material-ui/icons/FileUpload';
@@ -15,26 +14,19 @@ import PhotosBoard from '../PhotosBoard/PhotosBoard';
 import AlbumBoard from '../AlbumBoard/AlbumBoard';
 import SinglePhotoWrapper from '../SinglePhoto/SinglePhoto';
 
-const styles = {
-    headline: {
-        fontSize: 24,
-        paddingTop: 16,
-        marginBottom: 12,
-        fontWeight: 400,
-    },
-};
 
 class Dashboard extends React.Component {
 
     constructor(props) {
         super(props);
+        const rgxPath = /^\/[a-z]+\/./;
         this.logout = this.logout.bind(this);
-        this.status = this.status.bind(this);
         this.select = this.select.bind(this);
+        const pathValue = rgxPath.test(props.location.pathname) ? '/photos' : props.location.pathname;
         this.state = {
-            value: this.props.location.pathname,
+            value: pathValue,
         };
-        console.log(this.props);
+
     }
 
     select(event, value) {
@@ -48,15 +40,9 @@ class Dashboard extends React.Component {
         this.props.logoutAction();
     }
 
-    status() {
-        window.FB.getLoginStatus(function(response){
-            console.log('response.status', response);
-        });
-    }
-
     render() {
         return (
-            <div>
+            <div style={{zIndex: 2}}>
                 {/* Fader for requests */}
                 {/*{this.props.isAuthRequesting || this.props.isDeskRequesting ? <div className="fader"></div> : null}*/}
 
@@ -86,7 +72,7 @@ class Dashboard extends React.Component {
                 <Button
                     variant="raised"
                     color="secondary"
-                    style={{margin: '15px'}}
+                    style={{position: 'absolute', top: '70px', right: '17px', zIndex:2}}
                     onClick={this.logout}
                 >Logout</Button>
 

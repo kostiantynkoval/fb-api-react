@@ -74,6 +74,7 @@ class AlbumBoard extends React.Component {
                 {this.props.photos.length ?
                     <Paper className="photo-container">
                         {this.props.photos.map(photoItem => (
+
                             <div key={`${photoItem.id}${this.props.photosPaging}`} onClick={() => this.showPhoto(photoItem.id)} className="photo-item" style={{backgroundImage: `url(http://graph.facebook.com/${photoItem.id}/picture?access_token=${this.props.token})`}}></div>
                         ))}
                 </Paper> : null }

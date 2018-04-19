@@ -33,7 +33,6 @@ export default function (state = initialState, action) {
             };
         case LOGIN_SUCCESS:
         case CHECK_USER_STATUS_SUCCESS:
-            console.log('action', action.payload);
             const token = (action.payload.status === 'connected') ? action.payload.authResponse.accessToken : '';
             return {
                 ...state,

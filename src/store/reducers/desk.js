@@ -4,6 +4,7 @@ import {
     UPLOAD_FILES_FAIL,
     GET_ALBUMS_REQUEST,
     GET_ALBUMS_SUCCESS,
+    GET_ALBUMS_SELECT_SUCCESS,
     GET_ALBUMS_FAIL,
     GET_MORE_ALBUMS_REQUEST,
     GET_MORE_ALBUMS_SUCCESS,
@@ -49,6 +50,11 @@ export default function (state = initialState, action) {
                 albums: [...action.payload.data],
                 albumsPaging: action.payload.paging.cursors.after,
                 isAlbumsNext: !!action.payload.paging.next
+            };
+        case GET_ALBUMS_SELECT_SUCCESS:
+            return {
+                ...state,
+                albums: [...action.payload.data],
             };
         case GET_ALBUMS_FAIL:
             return {

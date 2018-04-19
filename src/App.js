@@ -4,18 +4,12 @@ import { withRouter, Route } from 'react-router-dom';
 import { Redirect } from 'react-router';
 import { checkUserStatusAction } from './store/actions/auth';
 import { hideSnackbarAction } from './store/actions/snackbar';
-import VK from './store/vk';
-import request from 'superagent';
 
 import Dashboard from './components/desk/Dashboard/Dashboard';
 import Login from './components/auth/Login/Login';
 import Snackbar from 'material-ui/Snackbar';
 
 class App extends Component {
-
-    constructor(props) {
-        super(props)
-    }
 
     componentDidMount() {
         this.props.checkUserStatusAction();
@@ -26,7 +20,6 @@ class App extends Component {
     };
 
     render() {
-        console.log('authStatus', this.props.authStatus);
         return (
             <div>
                 {this.props.isRequesting ? <div className="fader"></div> : null}

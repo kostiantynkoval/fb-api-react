@@ -2,6 +2,7 @@ import React from 'react'
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
 import {getAlbumsAction, getMoreAlbumsAction} from '../../../store/actions/desk';
+import Moment from 'react-moment';
 import Toolbar from 'material-ui/Toolbar';
 import Typography from 'material-ui/Typography';
 import Next from '@material-ui/icons/KeyboardArrowRight';
@@ -124,7 +125,7 @@ class PhotosBoard extends React.Component {
                                             Items: {item.count}
                                         </div>
                                         <div>
-                                            Last Updated: {item.updated_time}
+                                            Last Updated: <Moment format="DD MMM YYYY HH:mm">{item.updated_time}</Moment>
                                         </div>
                                         <div style={styles.arrow}>
                                             <Next/>

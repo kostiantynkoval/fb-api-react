@@ -11,7 +11,6 @@ const initialState = {
 export default function (state = initialState, action) {
     switch (action.type) {
         case SNACKBAR_SHOW:
-            console.log('action.payload1', action.payload);
             return {
                 ...state,
                 isSnackbarVisible: false,

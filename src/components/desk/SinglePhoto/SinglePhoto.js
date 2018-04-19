@@ -7,21 +7,17 @@ import Typography from 'material-ui/Typography';
 import Toolbar from 'material-ui/Toolbar';
 import Prev from '@material-ui/icons/KeyboardArrowLeft';
 import Folder from '@material-ui/icons/Folder';
+import Moment from 'react-moment';
 import './SinglePhoto.css';
 
 
 class SinglePhoto extends React.Component {
-
-    constructor(props) {
-        super(props);
-    }
 
     componentDidMount() {
         this.props.getSinglePhotoAction(this.props.match.params.id);
     }
 
     render() {
-        console.log(this.props);
         return (
             <div>
                 <Toolbar style={{backgroundColor: 'cadetblue', cursor: 'pointer'}} onClick={this.props.history.goBack}>
@@ -40,7 +36,9 @@ class SinglePhoto extends React.Component {
                             {this.props.singlePhoto.name || ''}
                         </Typography>
                         <Typography component="p">
-                            Created: {this.props.singlePhoto.updated_time || ''}
+                                Created:&nbsp;
+                            <Moment format="DD MMM YYYY HH:mm">{this.props.singlePhoto.updated_time}</Moment>
+
                         </Typography>
                     </CardContent>
                 </Card>
